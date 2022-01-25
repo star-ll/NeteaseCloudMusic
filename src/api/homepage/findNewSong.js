@@ -5,3 +5,6 @@ export const findRecommendSongSheet = (params) =>
 
 export const findNewSong = (params) =>
 	request("/api/personalized/newsong/", "get", params);
+
+export const findTopPlayList = (params) =>
+	request("/api//top/playlist/", "get", params);

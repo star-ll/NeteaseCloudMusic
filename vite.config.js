@@ -8,7 +8,7 @@ export default defineConfig({
 	mode: "development",
 	server: {
 		host: "127.0.0.1",
-		prot: "3002",
+		port: "3002",
 		proxy: {
 			"^/api": {
 				target:

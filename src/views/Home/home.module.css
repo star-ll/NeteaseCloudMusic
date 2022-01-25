@@ -1,0 +1,62 @@
+.homeHeader {
+    display: flex;
+    flex-direction: column;
+    background-color: #d43c33;
+    color: #fff;
+    overflow: hidden;
+}
+
+.logoName {
+    font-size: 1.5rem;
+    margin: 1em 0;
+    padding-left: 20px;
+}
+
+.homeNav {
+    background-color: #d43c33;
+    color: #fff;
+    padding: 0.5em 0 1.2em 0;
+}
+
+.nav {
+    display: flex;
+    justify-content: space-evenly;
+    margin: 0
+}
+
+ul {
+    padding: 0;
+    list-style: none;
+}
+
+.navButton {
+    /* color: #555; */
+    color: #e1eeff;
+    cursor: pointer;
+}
+
+.navButton a {
+    text-decoration: none;
+    color: #e1eeff;
+}
+
+.navButtonSelected a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+
+footer {
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+footer .footStatement {
+    font-size: 12px;
+
+}

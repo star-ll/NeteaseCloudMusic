@@ -1,138 +1,62 @@
-import { useState, useEffect } from "react";
-import "./home.css";
-// import {Modal } from "antd-mobile"
-import {
-	findRecommendSongSheet,
-	findNewSong,
-} from "../../api/homepage/findNewSong";
-
-const clientWidth = document.documentElement.clientWidth;
-
+import { useState } from "react";
+import classNames from "./home.module.css";
+import { PlayWindow } from "../../components/playWindow/playWindow";
+import { Link, Outlet } from "react-router-dom";
 export default function Home() {
-	let navClassName = "nav ul";
 	let [navIndex, setNavIndex] = useState(0);
-	let [recommendSongSheet, setRecommendSongSheet] = useState([]);
-	let [recommendNewSong, setRecommendNewSong] = useState([]);
-
-	// loginByPhone("/api/login/cellphone", {
-	// 	phone: "13620848124",
-	// 	password: "yujin8088",
-	// }).then((res) => {
-	// 	console.log(res);
-	// });
-	useEffect(() => {
-		findRecommendSongSheet({ limit: 6 })
-			.then((res) => {
-				// console.log(res.result);
-				setRecommendSongSheet(res.result || []);
-			})
-			.catch((err) => {
-				console.error(err);
-			});
-		findNewSong().then((res) => {
-			console.log(res);
-			setRecommendNewSong(res.result || []);
-		});
-	}, []);
-
 	return (
 		<div>
-			<header className="homeHeader">
-				<h2 className="logoName">余烬的音乐乡</h2>
-				<nav className="homeNav">
-					<ul className={navClassName}>
+			<header className={classNames.homeHeader}>
+				<h2 className={classNames.logoName}>余烬的音乐乡</h2>
+				<nav className={classNames.homeNav}>
+					<ul className={classNames.nav}>
 						<li
 							className={[
 								navIndex === 0
-									? "navButtonSelected"
-									: "navButton",
+									? classNames.navButtonSelected
+									: classNames.navButton,
 							]}
 							onClick={() => {
 								setNavIndex(0);
 							}}
 						>
-							发现
+							<Link to="/find"> 发现</Link>
 						</li>
 						<li
 							className={[
 								navIndex === 1
-									? "navButtonSelected"
-									: "navButton",
+									? classNames.navButtonSelected
+									: classNames.navButton,
 							]}
 							onClick={() => {
 								setNavIndex(1);
 							}}
 						>
-							排行
+							<Link to="/"> 排行</Link>
 						</li>
 						<li
 							className={[
 								navIndex === 2
-									? "navButtonSelected"
-									: "navButton",
+									? classNames.navButtonSelected
+									: classNames.navButton,
 							]}
 							onClick={() => {
 								setNavIndex(2);
 							}}
 						>
-							搜索
+							<Link to="/search"> 搜索</Link>
 						</li>
 					</ul>
-				</nav>{" "}
+				</nav>
 			</header>
-
-			<main>
-				<div>
-					<h3> 推荐歌单 </h3>
-					<ul className="recommendSongSheet">
-						{recommendSongSheet.map((item) => (
-							<li
-								className="recommendSongSheetItem"
-								key={item.id}
-							>
-								<img
-									className="recommendSongSheetImg"
-									src={
-										item.picUrl +
-										`?param=${clientWidth / 3 - 10}y${
-											clientWidth / 3 - 10
-										}`
-									}
-								></img>
-								<h4 className="recommendSongName">
-									{item.name}
-								</h4>
-							</li>
-						))}
-					</ul>
-				</div>
-				<div>
-					<h3>新歌速听</h3>
-					<div className="miScroll">
-						<ul className="recommendSongList">
-							{recommendNewSong.map((item) => (
-								<li
-									className="recommendSongListItem recommendSongSheetItem"
-									key={item.id}
-								>
-									<img
-										className="recommendSongSheetImg"
-										src={
-											item.picUrl +
-											`?param=${clientWidth / 3 - 10}y${
-												clientWidth / 3 - 10
-											}`
-										}
-									></img>
-									<h4 className="recommendSongName">
-										{item.name}
-									</h4>
-								</li>
-							))}
-						</ul>
-					</div>
-				</div>
-			</main>
+			<Outlet></Outlet>
+			<PlayWindow></PlayWindow>
+			<footer>
+				<section className={classNames.footStatement}>
+					本站仅作为学习之用，不可用于商业或其他用途
+				</section>
+			</footer>
+			<div style={{ height: "60px" }}></div>
 		</div>
 	);
 }

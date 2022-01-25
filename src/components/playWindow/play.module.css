@@ -1,0 +1,71 @@
+.playWindow {
+    height: 60px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    box-shadow: 2px 0 4px 3px #f2f2f2;
+    background-color: #fff;
+    opacity: 0.95;
+    position: fixed;
+    bottom: 0;
+    width: 100vw;
+    z-index: 1000;
+}
+
+
+
+.musicLogo {
+    margin: 0 0.5em 0 1em;
+    display: flex;
+}
+
+.musicLogo img {
+    width: 38px;
+    animation: rotate 2.7s linear infinite;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotateZ(0);
+    }
+
+    100% {
+        transform: rotateZ(360deg);
+    }
+}
+
+.songDetail {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+}
+
+.songDetail .songName {
+    margin: 0;
+    font-weight: 400;
+    font-size: 0.88rem;
+}
+
+.songDetail .singerName {
+    font-weight: 200;
+    font-size: 0.75rem;
+}
+
+.playControl {
+    display: flex;
+    width: 100px;
+    justify-content: space-around;
+}
+
+.playButton {
+    width: 30px;
+    height: 30px;
+}
+
+input[type="image"] {
+    outline: none;
+}
