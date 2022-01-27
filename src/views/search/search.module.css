@@ -1,0 +1,36 @@
+.searchBox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+}
+
+.searchBox :global(.searchBar) {
+
+    height: 1.5rem;
+    width: 50vw;
+    transition: width 0.6s;
+}
+
+.searchBox :global(.searchBar:focus-within) {
+    width: 80vw;
+}
+
+.searchBox :global(.searchBar .adm-search-bar-input-box) {
+    border: 1px solid #fe6f6f;
+}
+
+.playName {
+    font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 75vw;
+}
+
+.playDetail {
+    display: flex;
+    align-items: baseline;
+    font-size: 13px;
+    margin-top: 0.5em;
+}

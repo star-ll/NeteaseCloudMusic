@@ -4,20 +4,53 @@ import playMusic from "../../assets/play_music.svg";
 import pauseMusic from "../../assets/pause_music.svg";
 import songSheet from "../../assets/歌单.svg";
 import { useEffect, useState } from "react";
+import store from "@/store/playControl";
+import { Toast } from "antd-mobile";
 
-let audio = new window.Audio(
-	"https://music.163.com/song/media/outer/url?id=1384145901.mp3"
-);
+const state = store.getState();
+
+let audio = new window.Audio();
 export function PlayWindow() {
-	let [playStatus, setPlayStatus] = useState(false);
+	// 播放/暂停功能
 	function changePlayStatus() {
 		if (audio.paused) {
 			audio.play();
+			store.dispatch({ type: "change/play" });
 		} else {
 			audio.pause();
+			store.dispatch({ type: "change/pause" });
 		}
-		setPlayStatus(!playStatus);
 	}
+	// 播放错误监听
+	useEffect(() => {
+		audio.onerror = () => {
+			Toast.show({
+				content: "此音乐不可播放",
+				position: "bottom",
+			});
+		};
+	}, []);
+	// 切换歌曲
+	useEffect(() => {
+		let unSubscribe = store.subscribe(() => {
+			let state = store.getState();
+			if (state.playDetail.id != null) {
+				try {
+					audio.src =
+						"https://music.163.com/song/media/outer/url?id=" +
+						state.playDetail.id +
+						".mp3";
+					audio.play();
+					store.dispatch({ type: "change/play" });
+				} catch (e) {
+					console.log(e);
+				}
+			}
+		});
+		return () => {
+			unSubscribe();
+		};
+	}, []);
 
 	const songDetail = {
 		songName: "火力少年王",
@@ -32,7 +65,10 @@ export function PlayWindow() {
 				<img
 					src={musicLogo}
 					style={{
-						animationPlayState: playStatus ? "running" : "paused",
+						animationPlayState:
+							state.playDetail.status === "played"
+								? "running"
+								: "paused",
 					}}
 				/>
 			</section>
@@ -47,7 +83,11 @@ export function PlayWindow() {
 				<input
 					className={classNames.playButton}
 					type="image"
-					src={playStatus ? pauseMusic : playMusic}
+					src={
+						state.playDetail.status === "played"
+							? pauseMusic
+							: playMusic
+					}
 					onClick={changePlayStatus}
 				></input>
 				<input

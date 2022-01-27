@@ -2,12 +2,27 @@ import { useState } from "react";
 import classNames from "./home.module.css";
 import { PlayWindow } from "../../components/playWindow/playWindow";
 import { Link, Outlet } from "react-router-dom";
+import moreUrl from "../../assets/更多.svg";
+import noLoginUrl from "../../assets/未登录.svg";
+
 export default function Home() {
 	let [navIndex, setNavIndex] = useState(0);
+
 	return (
 		<div>
 			<header className={classNames.homeHeader}>
-				<h2 className={classNames.logoName}>余烬的音乐乡</h2>
+				<ul className={classNames.headerUl}>
+					<li className={classNames.moreIcon}>
+						<img src={moreUrl} />
+					</li>
+					<li>
+						<h2 className={classNames.logoName}>余烬的音乐乡</h2>
+					</li>
+					<li className={classNames.loginIcon}>
+						<img src={noLoginUrl} />
+					</li>
+				</ul>
+
 				<nav className={classNames.homeNav}>
 					<ul className={classNames.nav}>
 						<li

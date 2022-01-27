@@ -4,12 +4,13 @@
     background-color: #d43c33;
     color: #fff;
     overflow: hidden;
+    box-shadow: 0 3px 25px rgba(212, 60, 51, 0.25);
 }
 
 .logoName {
+    text-align: center;
     font-size: 1.5rem;
     margin: 1em 0;
-    padding-left: 20px;
 }
 
 .homeNav {
@@ -37,7 +38,8 @@ ul {
 
 .navButton a {
     text-decoration: none;
-    color: #e1eeff;
+    /* color: #e1eeff; */
+    color: #f5f9ff;
 }
 
 .navButtonSelected a {
@@ -47,6 +49,34 @@ ul {
     cursor: pointer;
 }
 
+.moreIcon,
+.loginIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.moreIcon {
+    padding-left: 1em
+}
+
+.loginIcon {
+    padding-right: 1em
+}
+
+.moreIcon img,
+.loginIcon img {
+    width: 20px;
+    height: 20px;
+}
+
+.headerUl {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0;
+}
 
 footer {
     height: 100px;

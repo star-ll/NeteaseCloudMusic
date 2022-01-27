@@ -47,6 +47,7 @@ class Request {
 					// get请求构建参数
 					if (["get", "GET".includes(method)]) {
 						for (let key in data) {
+							if (data[key] == null) continue;
 							url += url.includes("?")
 								? `&${key}=${data[key]}`
 								: `?${key}=${data[key]}`;
