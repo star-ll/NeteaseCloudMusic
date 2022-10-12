@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { ProgressBar, Slider, Toast } from "antd-mobile";
 import { useDispatch, useSelector } from "react-redux";
 import { changePlayStatus, changePlayTime } from "../../store/playControlSlice";
+import { audioControl } from "../../utils/audio";
 
 export function PlayWindow(props) {
 	const dispatch = useDispatch();
@@ -17,94 +18,79 @@ export function PlayWindow(props) {
 
 	// 播放/暂停功能
 	function changeStatus() {
-		if (playControlSlice.playStatus === "paused") {
-			dispatch(
-				changePlayStatus({
-					playStatus: "playing",
-				})
-			);
-		} else {
-			dispatch(
-				changePlayStatus({
-					playStatus: "paused",
-				})
-			);
-		}
+		// if (playControlSlice.playStatus === "paused") {
+		// 	dispatch(
+		// 		changePlayStatus({
+		// 			playStatus: "playing",
+		// 		})
+		// 	);
+		// } else {
+		// 	dispatch(
+		// 		changePlayStatus({
+		// 			playStatus: "paused",
+		// 		})
+		// 	);
+		// }
 	}
 
 	function onProgressAfterChange(value) {
-		const isEnded = audio.ended;
-		audio.currentTime = (value / 100) * audio.duration;
-
-		if (isEnded) {
-			audio.play();
-		}
+		audioControl.changeProgress(value);
 	}
 
-	let audio = window.audio;
-
 	useEffect(() => {
-		if (!audio) {
-			audio = new window.Audio();
-			window.audio = audio;
-		}
-
-		audio.onerror = () => {
-			Toast.show({
-				content: "此音乐不可播放",
-				position: "bottom",
-			});
-		};
-		audio.onpause = function () {
-			dispatch(
-				changePlayStatus({
-					playStatus: "paused",
-				})
-			);
-		};
-		audio.onplaying = function () {
-			dispatch(
-				changePlayStatus({
-					playStatus: "playing",
-				})
-			);
-		};
-		audio.oncanplay = function () {
-			dispatch(
-				changePlayTime({
-					duration: audio.duration,
-				})
-			);
-		};
-
-		audio.ontimeupdate = function () {
+		// audio.onerror = () => {
+		// 	Toast.show({
+		// 		content: "此音乐不可播放",
+		// 		position: "bottom",
+		// 	});
+		// };
+		// audio.onpause = function () {
+		// 	dispatch(
+		// 		changePlayStatus({
+		// 			playStatus: "paused",
+		// 		})
+		// 	);
+		// };
+		// audio.onplaying = function () {
+		// 	dispatch(
+		// 		changePlayStatus({
+		// 			playStatus: "playing",
+		// 		})
+		// 	);
+		// };
+		// audio.oncanplay = function () {
+		// 	dispatch(
+		// 		changePlayTime({
+		// 			duration: audio.duration,
+		// 		})
+		// 	);
+		// };
+		audioControl.audio.ontimeupdate = function () {
 			dispatch(
 				changePlayTime({
-					currentTime: audio.currentTime,
+					currentTime: audioControl.audio.currentTime,
 				})
 			);
-
-			setProgress((audio.currentTime / audio.duration) * 100);
+			setProgress(
+				(audioControl.audio.currentTime / audioControl.audio.duration) *
+					100
+			);
 		};
 	}, []);
 
-	useEffect(() => {
-		if (playControlSlice.playStatus === "playing") {
-			audio.play();
-		} else {
-			audio.pause();
-		}
-	}, [playControlSlice.playStatus]);
+	// useEffect(() => {
+	// 	if (playControlSlice.playStatus === "playing") {
+	// 		audioControl.play();
+	// 	} else {
+	// 		audioControl.pause();
+	// 	}
+	// }, [playControlSlice.playStatus]);
 
-	useEffect(() => {
-		if (playControlSlice.musicInfo.id) {
-			audio.src =
-				"https://music.163.com/song/media/outer/url?id=" +
-				playControlSlice.musicInfo.id +
-				".mp3";
-			audio.play();
-		}
-	}, [playControlSlice.musicInfo.id]);
+	// useEffect(() => {
+	// 	if (playControlSlice.musicInfo.id) {
+	// 		audioControl.play(playControlSlice.musicInfo.id);
+	// 	}
+	// }, [playControlSlice.musicInfo.id]);
 
 	return (
 		<div className={classNames.playWindow}>

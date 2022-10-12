@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { audioControl } from "../utils/audio";
 
 const initialState = {
 	musicInfo: {
@@ -16,11 +17,26 @@ const playControlSlice = createSlice({
 	initialState,
 	reducers: {
 		changePlayStatus(state, action) {
-			if (action.payload.musicInfo) {
-				state.musicInfo = action.payload.musicInfo;
-			}
 			if (action.payload.playStatus) {
 				state.playStatus = action.payload.playStatus;
+
+				if (action.payload.playStatus === "playing") {
+					audioControl.play(
+						action.payload.musicInfo.id === state.musicInfo.id
+							? null
+							: action.payload.musicInfo.id
+					);
+					console.log(audioControl);
+				} else if (action.payload.playStatus === "paused") {
+					audioControl.pause();
+				}
+			}
+
+			if (action.payload.musicInfo) {
+				state.musicInfo = {
+					...state.musicInfo,
+					...action.payload.musicInfo,
+				};
 			}
 		},
 		changePlayTime(state, action) {

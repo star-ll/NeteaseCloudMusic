@@ -59,8 +59,6 @@ export default function Search() {
 				},
 			})
 		);
-
-		console.log(1, playControlSlice);
 	}
 
 	return (
