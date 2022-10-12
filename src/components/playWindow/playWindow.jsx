@@ -4,98 +4,164 @@ import playMusic from "../../assets/play_music.svg";
 import pauseMusic from "../../assets/pause_music.svg";
 import songSheet from "../../assets/歌单.svg";
 import { useEffect, useState } from "react";
-import store from "@/store/playControl";
-import { Toast } from "antd-mobile";
+import { ProgressBar, Slider, Toast } from "antd-mobile";
+import { useDispatch, useSelector } from "react-redux";
+import { changePlayStatus, changePlayTime } from "../../store/playControlSlice";
 
-const state = store.getState();
+export function PlayWindow(props) {
+	const dispatch = useDispatch();
+	const playControlSlice = useSelector((state) => state.playControl);
 
-let audio = new window.Audio();
-export function PlayWindow() {
+	const [progress, setProgress] = useState(0);
+	let [isTouchProgressBar, setIsTouchProgressBar] = useState(false);
+
 	// 播放/暂停功能
-	function changePlayStatus() {
-		if (audio.paused) {
-			audio.play();
-			store.dispatch({ type: "change/play" });
+	function changeStatus() {
+		if (playControlSlice.playStatus === "paused") {
+			dispatch(
+				changePlayStatus({
+					playStatus: "playing",
+				})
+			);
 		} else {
-			audio.pause();
-			store.dispatch({ type: "change/pause" });
+			dispatch(
+				changePlayStatus({
+					playStatus: "paused",
+				})
+			);
 		}
 	}
-	// 播放错误监听
+
+	function onProgressAfterChange(value) {
+		const isEnded = audio.ended;
+		audio.currentTime = (value / 100) * audio.duration;
+
+		if (isEnded) {
+			audio.play();
+		}
+	}
+
+	let audio = window.audio;
+
 	useEffect(() => {
+		if (!audio) {
+			audio = new window.Audio();
+			window.audio = audio;
+		}
+
 		audio.onerror = () => {
 			Toast.show({
 				content: "此音乐不可播放",
 				position: "bottom",
 			});
 		};
-	}, []);
-	// 切换歌曲
-	useEffect(() => {
-		let unSubscribe = store.subscribe(() => {
-			let state = store.getState();
-			if (state.playDetail.id != null) {
-				try {
-					audio.src =
-						"https://music.163.com/song/media/outer/url?id=" +
-						state.playDetail.id +
-						".mp3";
-					audio.play();
-					store.dispatch({ type: "change/play" });
-				} catch (e) {
-					console.log(e);
-				}
-			}
-		});
-		return () => {
-			unSubscribe();
+		audio.onpause = function () {
+			dispatch(
+				changePlayStatus({
+					playStatus: "paused",
+				})
+			);
+		};
+		audio.onplaying = function () {
+			dispatch(
+				changePlayStatus({
+					playStatus: "playing",
+				})
+			);
+		};
+		audio.oncanplay = function () {
+			dispatch(
+				changePlayTime({
+					duration: audio.duration,
+				})
+			);
+		};
+
+		audio.ontimeupdate = function () {
+			dispatch(
+				changePlayTime({
+					currentTime: audio.currentTime,
+				})
+			);
+
+			setProgress((audio.currentTime / audio.duration) * 100);
 		};
 	}, []);
 
-	const songDetail = {
-		songName: "火力少年王",
-		singer: {
-			name: "张三",
-		},
-	};
+	useEffect(() => {
+		if (playControlSlice.playStatus === "playing") {
+			audio.play();
+		} else {
+			audio.pause();
+		}
+	}, [playControlSlice.playStatus]);
+
+	useEffect(() => {
+		if (playControlSlice.musicInfo.id) {
+			audio.src =
+				"https://music.163.com/song/media/outer/url?id=" +
+				playControlSlice.musicInfo.id +
+				".mp3";
+			audio.play();
+		}
+	}, [playControlSlice.musicInfo.id]);
 
 	return (
-		<section className={classNames.playWindow}>
-			<section className={classNames.musicLogo}>
-				<img
-					src={musicLogo}
-					style={{
-						animationPlayState:
-							state.playDetail.status === "played"
-								? "running"
-								: "paused",
-					}}
-				/>
+		<div className={classNames.playWindow}>
+			<div
+				onTouchStart={() => setIsTouchProgressBar(true)}
+				onTouchEnd={() => setIsTouchProgressBar(false)}
+			>
+				<Slider
+					className={classNames.progressSlider}
+					min={0}
+					max={100}
+					value={isTouchProgressBar ? undefined : progress}
+					defaultValue={0}
+					style={{ "--fill-color": "#d43c33" }}
+					onAfterChange={onProgressAfterChange}
+				></Slider>
+			</div>
+			<section style={{ display: "flex", margin: "auto" }}>
+				<section className={classNames.musicLogo}>
+					<img
+						src={musicLogo}
+						style={{
+							animationPlayState:
+								playControlSlice.playStatus === "playing"
+									? "running"
+									: "paused",
+						}}
+					/>
+				</section>
+				<section className={classNames.songDetail}>
+					<h4 className={classNames.songName}>
+						{" "}
+						{playControlSlice.musicInfo.name}{" "}
+					</h4>
+					&nbsp; - &nbsp;
+					<span className={classNames.singerName}>
+						{playControlSlice.musicInfo.singer}
+					</span>
+				</section>
+				<section className={classNames.playControl}>
+					<input
+						className={classNames.playButton}
+						type="image"
+						src={
+							playControlSlice.playStatus === "playing"
+								? pauseMusic
+								: playMusic
+						}
+						onClick={changeStatus}
+					></input>
+					<input
+						className={classNames.playButton}
+						type="image"
+						src={songSheet}
+					></input>
+				</section>
 			</section>
-			<section className={classNames.songDetail}>
-				<h4 className={classNames.songName}> {songDetail.songName} </h4>
-				&nbsp; - &nbsp;
-				<span className={classNames.singerName}>
-					{songDetail.singer.name}
-				</span>
-			</section>
-			<section className={classNames.playControl}>
-				<input
-					className={classNames.playButton}
-					type="image"
-					src={
-						state.playDetail.status === "played"
-							? pauseMusic
-							: playMusic
-					}
-					onClick={changePlayStatus}
-				></input>
-				<input
-					className={classNames.playButton}
-					type="image"
-					src={songSheet}
-				></input>
-			</section>
-		</section>
+		</div>
 	);
 }

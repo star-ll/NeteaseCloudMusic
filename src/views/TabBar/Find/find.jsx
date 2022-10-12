@@ -4,7 +4,7 @@ import {
 	findRecommendSongSheet,
 	findNewSong,
 	findTopPlayList,
-} from "../../api/homepage/findNewSong";
+} from "../../../api/homepage/findNewSong";
 
 const clientWidth = document.documentElement.clientWidth;
 

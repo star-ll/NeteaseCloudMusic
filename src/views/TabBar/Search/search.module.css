@@ -33,4 +33,9 @@
     align-items: baseline;
     font-size: 13px;
     margin-top: 0.5em;
+
+    width: 80%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }

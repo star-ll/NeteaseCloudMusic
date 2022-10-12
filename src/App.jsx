@@ -1,8 +1,8 @@
 import logo from "./logo.svg";
 import "./App.css";
-import Home from "@/views/Home/home";
-import Find from "@/views/Find/find";
-import Search from "@/views/Search/search";
+import Home from "@/views/TabBar/Home/home";
+import Find from "@/views/TabBar/Find/find";
+import Search from "@/views/TabBar/Search/search";
 import React from "react";
 import {
 	BrowserRouter as Router,

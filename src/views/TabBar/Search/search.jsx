@@ -1,15 +1,19 @@
 import { SearchBar, List, InfiniteScroll } from "antd-mobile";
 import classNames from "./search.module.css";
 import { fetchSearchResult } from "@/api/homepage/search";
-import { useEffect, useState } from "react";
-import store from "@/store/playControl";
-
-let keywords = "";
-let pageNumber = 0;
+import { useState } from "react";
+import { changePlayStatus } from "../../../store/playControlSlice";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+let pageNumber = -1;
 let maxNum;
 export default function Search() {
 	let [playList, setPlayList] = useState([]);
 	const [hasMore, setHasMore] = useState(true);
+	const [keywords, setKeywords] = useState("");
+
+	const dispatch = useDispatch();
+	const playControlSlice = useSelector((state) => state.playControl);
 
 	// 加载新的一页
 	async function loadMore() {
@@ -20,23 +24,43 @@ export default function Search() {
 			offset = maxNum;
 			setHasMore(false);
 		}
-		return search(keywords, offset);
+		await search(keywords, offset);
 	}
 
 	function search(val, offset) {
-		keywords = val;
-		fetchSearchResult({
-			keywords: val,
-			offset,
-		}).then((res) => {
-			if (res.code !== 200) return;
-			setPlayList([...playList, ...res.result.songs]);
-			maxNum = res.result.songCount;
+		setKeywords(val);
+		return new Promise((resolve, reject) => {
+			fetchSearchResult({
+				keywords: val,
+				offset,
+			})
+				.then((res) => {
+					if (res.code !== 200) return;
+					setPlayList([...playList, ...res.result.songs]);
+					maxNum = res.result.songCount;
+					resolve();
+				})
+				.catch(() => {
+					reject();
+				});
 		});
 	}
 	function play(item) {
-		store.dispatch({ type: "playMusic", id: item.id });
-		store.dispatch({ type: "change/play" });
+		// store.dispatch({ type: "playMusic", id: item.id });
+		// store.dispatch({ type: "change/play" });
+		console.log(item);
+		dispatch(
+			changePlayStatus({
+				playStatus: "playing",
+				musicInfo: {
+					singer: item.ar?.[0].name || "",
+					name: item.name,
+					id: item.id,
+				},
+			})
+		);
+
+		console.log(1, playControlSlice);
 	}
 
 	return (
@@ -45,7 +69,13 @@ export default function Search() {
 				<SearchBar
 					className="searchBar"
 					placeholder="搜索"
-					onSearch={search}
+					onSearch={(val) => {
+						setKeywords(val);
+						if (keywords) {
+							setPlayList([]);
+							pageNumber = -1;
+						}
+					}}
 					style={{
 						"--background": "#ffffff",
 						"--border-radius": "20px",

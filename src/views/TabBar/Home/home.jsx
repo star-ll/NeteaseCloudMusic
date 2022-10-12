@@ -1,11 +1,17 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import classNames from "./home.module.css";
-import { PlayWindow } from "../../components/playWindow/playWindow";
+import { PlayWindow } from "@/components/PlayWindow/playWindow";
 import { Link, Outlet } from "react-router-dom";
-import moreUrl from "../../assets/更多.svg";
-import noLoginUrl from "../../assets/未登录.svg";
+import moreUrl from "@/assets/更多.svg";
+import noLoginUrl from "@/assets/未登录.svg";
+import React from "react";
 
 export default function Home() {
+	if (import.meta.hot) {
+		console.log(import.meta.hot);
+		console.log(import.meta.hot);
+	}
+
 	let [navIndex, setNavIndex] = useState(0);
 
 	return (

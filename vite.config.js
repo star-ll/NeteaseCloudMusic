@@ -1,5 +1,5 @@
+/**@type {import('vite').UserConfig}  */
 import { defineConfig } from "vite";
-import "path";
 import react from "@vitejs/plugin-react";
 import path from "path";
 
@@ -8,12 +8,11 @@ export default defineConfig({
 	base: "./",
 	mode: "development",
 	server: {
-		host: "127.0.0.1",
+		// host: "127.0.0.1",
 		port: "3002",
 		proxy: {
 			"^/api": {
-				target:
-					"https://netease-cloud-music-api-peach-five.vercel.app/",
+				target: "http://localhost:3000",
 				changeOrigin: true,
 				rewrite: (path) => path.replace(/^\/api/, ""),
 			},
@@ -22,7 +21,9 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			"@": path.join(__dirname, "./src/"),
+			"@component": path.join(__dirname, "./src/components"),
 		},
+		extensions: [".tsx", ".ts", ".js", ".jsx"],
 	},
 	plugins: [react()],
 });
