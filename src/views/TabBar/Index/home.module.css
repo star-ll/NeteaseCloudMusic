@@ -1,0 +1,80 @@
+.homeHeader {
+	display: flex;
+	flex-direction: column;
+	background-color: #d43c33;
+	color: #fff;
+	overflow: hidden;
+	box-shadow: 0 3px 25px rgba(212, 60, 51, 0.25);
+}
+
+.logoName {
+	text-align: center;
+	font-size: 1.5rem;
+	margin: 1em 0;
+}
+
+.homeNav {
+	background-color: #d43c33;
+	color: #fff;
+	padding: 0.5em 0 1.2em 0;
+}
+
+.navButton {
+	/* color: #555; */
+	color: #e1eeff;
+	cursor: pointer;
+}
+
+.navButton a {
+	text-decoration: none;
+	/* color: #e1eeff; */
+	color: #f5f9ff;
+}
+
+.navButtonSelected a {
+	text-decoration: none;
+	color: #fff;
+	font-weight: 700;
+	cursor: pointer;
+}
+
+.moreIcon,
+.loginIcon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+}
+
+.moreIcon {
+	padding-left: 1em;
+}
+
+.loginIcon {
+	padding-right: 1em;
+}
+
+.moreIcon img,
+.loginIcon img {
+	width: 20px;
+	height: 20px;
+}
+
+.headerUl {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin: 0;
+}
+
+footer {
+	height: 100px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+footer .footStatement {
+	font-size: 12px;
+}

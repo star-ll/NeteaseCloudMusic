@@ -30,7 +30,7 @@ export default function Home() {
 				</ul>
 
 				<nav className={classNames.homeNav}>
-					<ul className={classNames.nav}>
+					<ul className="flex justify-evenly">
 						<li
 							className={[
 								navIndex === 0
@@ -53,7 +53,7 @@ export default function Home() {
 								setNavIndex(1);
 							}}
 						>
-							<Link to="/"> 排行</Link>
+							<Link to="/toplist"> 排行</Link>
 						</li>
 						<li
 							className={[

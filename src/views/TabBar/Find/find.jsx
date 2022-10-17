@@ -5,8 +5,10 @@ import {
 	findNewSong,
 	findTopPlayList,
 } from "../../../api/homepage/findNewSong";
+import { utils } from "../../../utils";
+import { Link } from "react-router-dom";
 
-const clientWidth = document.documentElement.clientWidth;
+const clientWidth = utils.getClientWidth();
 
 export default function Find() {
 	let [recommendSongSheet, setRecommendSongSheet] = useState([]);
@@ -35,42 +37,14 @@ export default function Find() {
 		<div>
 			<main>
 				<div>
-					<h3> 推荐歌单 </h3>
+					<h3 className="text-lg py-2"> 推荐歌单 </h3>
 					<ul className={classNames.recommendSongSheet}>
 						{recommendSongSheet.map((item) => (
 							<li
 								className={classNames.recommendSongSheetItem}
 								key={item.id}
 							>
-								<img
-									className={classNames.recommendSongSheetImg}
-									src={
-										item.picUrl +
-										`?param=${parseInt(
-											clientWidth / 3 - 10
-										)}y${parseInt(clientWidth / 3 - 10)}`
-									}
-								></img>
-								<h4 className={classNames.recommendSongName}>
-									{item.name}
-								</h4>
-							</li>
-						))}
-					</ul>
-				</div>
-				<div>
-					<h3 style={{ margin: "0.4em 0 0 0" }}>新歌速听</h3>
-					<div className={classNames.miScroll}>
-						<ul className={classNames.recommendSongList}>
-							{recommendNewSong.map((item) => (
-								<li
-									className={
-										classNames.recommendSongListItem +
-										" " +
-										classNames.recommendSongSheetItem
-									}
-									key={item.id}
-								>
+								<Link to={"/playlist/" + item.id}>
 									<img
 										className={
 											classNames.recommendSongSheetImg
@@ -89,31 +63,68 @@ export default function Find() {
 									>
 										{item.name}
 									</h4>
+								</Link>
+							</li>
+						))}
+					</ul>
+				</div>
+				<div>
+					<h3 className="text-lg py-2">新歌速听</h3>
+					<div className={classNames.miScroll}>
+						<ul className={classNames.recommendSongList + " flex"}>
+							{recommendNewSong.map((item) => (
+								<li className="w-32 m-1" key={item.id}>
+									<img
+										className="max-w-lg"
+										src={
+											item.picUrl +
+											`?param=${parseInt(
+												clientWidth / 3 - 10
+											)}y${parseInt(
+												clientWidth / 3 - 10
+											)}`
+										}
+									></img>
+									<p
+										className={
+											"overflow-ellipsis whitespace-nowrap w-full overflow-x-hidden"
+										}
+									>
+										{item.name}
+									</p>
 								</li>
 							))}
 						</ul>
 					</div>
 				</div>
 				<div>
-					<h3> 网友精选碟 </h3>
+					<h3 className="text-lg py-2"> 网友精选碟 </h3>
 					<ul className={classNames.recommendSongSheet}>
 						{recommendTopPlayList.map((item) => (
 							<li
 								className={classNames.recommendSongSheetItem}
 								key={item.id}
 							>
-								<img
-									className={classNames.recommendSongSheetImg}
-									src={
-										item.coverImgUrl +
-										`?param=${parseInt(
-											clientWidth / 3 - 10
-										)}y${parseInt(clientWidth / 3 - 10)}`
-									}
-								></img>
-								<h4 className={classNames.recommendSongName}>
-									{item.name}
-								</h4>
+								<Link to={"/playlist/" + item.id}>
+									<img
+										className={
+											classNames.recommendSongSheetImg
+										}
+										src={
+											item.coverImgUrl +
+											`?param=${parseInt(
+												clientWidth / 3 - 10
+											)}y${parseInt(
+												clientWidth / 3 - 10
+											)}`
+										}
+									></img>
+									<h4
+										className={classNames.recommendSongName}
+									>
+										{item.name}
+									</h4>
+								</Link>
 							</li>
 						))}
 					</ul>

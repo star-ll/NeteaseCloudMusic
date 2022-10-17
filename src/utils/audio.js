@@ -1,6 +1,12 @@
+import { fetchPlayUrl } from "../api/play/play";
+
+function loadPlay() {
+	this.audio.play();
+	this.audio.removeEventListener("canplay", loadPlay);
+}
+
 // 单例模式
 let hasCreated = false;
-
 export class AudioControl {
 	onerrorFns = [];
 	onpauseFns = [];
@@ -36,13 +42,31 @@ export class AudioControl {
 
 	play(id) {
 		if (id != null) {
-			this.audio.src =
-				"https://music.163.com/song/media/outer/url?id=" + id + ".mp3";
+			fetchPlayUrl({ id })
+				.then((res) => {
+					console.log(res);
+					if (!Array.isArray(res.data) || res.data.length === 0) {
+						throw new Error("歌曲不可播放");
+					}
+					this.audio.pause();
+					this.audio.src = res.data[0].url;
+					// 歌曲可播放后开始播放
+					this.audio.addEventListener("canplay", loadPlay.bind(this));
+					this.audio.load();
+				})
+				.catch((err) => {
+					console.error(err);
+					Toast.show({
+						content: err,
+					});
+				});
+			// this.audio.src =
+			// 	"https://music.163.com/song/media/outer/url?id=" + id + ".mp3";
 
 			this.id = id;
+		} else {
+			this.audio.play();
 		}
-
-		this.audio.play();
 	}
 
 	pause() {

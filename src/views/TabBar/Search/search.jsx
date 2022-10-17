@@ -1,4 +1,4 @@
-import { SearchBar, List, InfiniteScroll } from "antd-mobile";
+import { SearchBar, List, InfiniteScroll, Tag } from "antd-mobile";
 import classNames from "./search.module.css";
 import { fetchSearchResult } from "@/api/homepage/search";
 import { useState } from "react";
@@ -46,8 +46,6 @@ export default function Search() {
 		});
 	}
 	function play(item) {
-		// store.dispatch({ type: "playMusic", id: item.id });
-		// store.dispatch({ type: "change/play" });
 		console.log(item);
 		dispatch(
 			changePlayStatus({
@@ -83,9 +81,28 @@ export default function Search() {
 			</section>
 			<List mode="card" style={{ "--border-inner": "transparent" }}>
 				{playList.map((item, index) => (
-					<List.Item key={item.id} onClick={() => play(item)}>
+					<List.Item
+						key={item.id}
+						disabled={!item.resourceState}
+						onClick={() => play(item)}
+					>
 						<div className={classNames.playName}> {item.name} </div>
-						<div className={classNames.playDetail}>
+						<div className={classNames.playDetail + " mt-1"}>
+							{item.sq && (
+								<Tag color="danger" className="mr-1">
+									SQ
+								</Tag>
+							)}
+							{item.originCoverType == 1 && (
+								<Tag color="danger" className={" mr-1"}>
+									原唱
+								</Tag>
+							)}
+							{item.fee === 1 && (
+								<Tag color="danger" className={" mr-1"}>
+									试听
+								</Tag>
+							)}
 							<span className={classNames.playSinger}>
 								{" "}
 								{item.ar[0] && item.ar[0].name}{" "}

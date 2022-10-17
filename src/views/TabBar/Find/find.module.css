@@ -1,76 +1,76 @@
 .recommendSongSheet {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    justify-items: center;
-    justify-content: space-evenly;
-    gap: 0.4em 0.4em;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	justify-items: center;
+	justify-content: space-evenly;
+	gap: 0.4em 0.4em;
 }
 
 .recommendSongSheet .recommendSongSheetItem {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
 .recommendSongSheet .recommendSongSheetImg {
-    border-radius: 6px;
-    box-shadow: 1px 2px 2px 1px #e9e7e7;
-    cursor: pointer;
+	border-radius: 6px;
+	box-shadow: 1px 2px 2px 1px #e9e7e7;
+	cursor: pointer;
 }
 
 .recommendSongSheet .recommendSongName {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: normal;
-    word-wrap: break-word;
-    word-break: normal;
-    display: -webkit-box;
-    /* 将对象作为弹性伸缩盒子模型显示 */
-    -webkit-line-clamp: 2;
-    /* 控制最多显示几行 */
-    -webkit-box-orient: vertical;
-    /* 设置或检索伸缩盒对象的子元素的排列方式 */
-    margin-top: .5rem;
-    margin-bottom: 0.8em;
-    font-size: 13px;
-    color: rgba(26, 26, 26, 1);
-    padding: 0 0.25em;
-    font-weight: 500;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: normal;
+	word-wrap: break-word;
+	word-break: normal;
+	display: -webkit-box;
+	/* 将对象作为弹性伸缩盒子模型显示 */
+	-webkit-line-clamp: 2;
+	/* 控制最多显示几行 */
+	-webkit-box-orient: vertical;
+	/* 设置或检索伸缩盒对象的子元素的排列方式 */
+	margin-top: 0.5rem;
+	margin-bottom: 0.8em;
+	font-size: 13px;
+	color: rgba(26, 26, 26, 1);
+	padding: 0 0.25em;
+	font-weight: 500;
 }
 
 .recommendSongList {
-    display: flex;
-    overflow-x: auto;
-    overflow-y: hidden;
-    margin-bottom: -0.5em;
-    margin-top: 0.2em;
-    padding: 0.5em 0;
+	/* display: flex; */
+	overflow-x: auto;
+	overflow-y: hidden;
+	margin-bottom: -0.5em;
+	margin-top: 0.2em;
+	padding: 0.5em 0;
 }
 
 .miScroll {
-    overflow: hidden;
+	overflow: hidden;
 }
 
 .recommendSongListItem {
-    margin: 0.5em 0.8em;
+	margin: 0.5em 0.8em;
 }
 
 .recommendSongList img {
-    border-radius: 6px;
-    box-shadow: 1px 2px 2px 1px #e9e7e7;
-    cursor: pointer;
+	border-radius: 6px;
+	box-shadow: 1px 2px 2px 1px #e9e7e7;
+	cursor: pointer;
 }
 
 .recommendSongName {
-    font-size: 13px;
-    color: rgba(26, 26, 26, 1);
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    white-space: normal;
-    word-wrap: break-word;
-    word-break: normal;
-    font-weight: 500;
-    margin: 0.2em 0;
+	font-size: 13px;
+	color: rgba(26, 26, 26, 1);
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	white-space: normal;
+	word-wrap: break-word;
+	word-break: normal;
+	font-weight: 500;
+	margin: 0.2em 0;
 }
