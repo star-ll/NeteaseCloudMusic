@@ -18,21 +18,3 @@
 .searchBox :global(.searchBar .adm-search-bar-input-box) {
 	border: 1px solid #fe6f6f;
 }
-
-.playName {
-	font-size: 1rem;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	width: 75vw;
-}
-
-.playDetail {
-	display: flex;
-	font-size: 13px;
-
-	width: 80%;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-}

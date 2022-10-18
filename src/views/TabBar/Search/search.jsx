@@ -5,6 +5,7 @@ import { useState } from "react";
 import { changePlayStatus } from "../../../store/playControlSlice";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { audioControl } from "../../../utils";
 let pageNumber = -1;
 let maxNum;
 export default function Search() {
@@ -47,16 +48,17 @@ export default function Search() {
 	}
 	function play(item) {
 		console.log(item);
-		dispatch(
-			changePlayStatus({
-				playStatus: "playing",
-				musicInfo: {
-					singer: item.ar?.[0].name || "",
-					name: item.name,
-					id: item.id,
-				},
-			})
-		);
+		// dispatch(
+		// 	changePlayStatus({
+		// 		playStatus: "playing",
+		// 		musicInfo: {
+		// 			singer: item.ar,
+		// 			name: item.name,
+		// 			id: item.id,
+		// 		},
+		// 	})
+		// );
+		audioControl.play(item.id);
 	}
 
 	return (
@@ -79,15 +81,26 @@ export default function Search() {
 					}}
 				/>
 			</section>
-			<List mode="card" style={{ "--border-inner": "transparent" }}>
+			<List
+				mode="card"
+				className=""
+				style={{
+					"--border-inner": "transparent",
+					margin: 0,
+				}}
+			>
 				{playList.map((item, index) => (
 					<List.Item
 						key={item.id}
 						disabled={!item.resourceState}
 						onClick={() => play(item)}
 					>
-						<div className={classNames.playName}> {item.name} </div>
-						<div className={classNames.playDetail + " mt-1"}>
+						<div className={"text-base"}> {item.name} </div>
+						<div
+							className={
+								"text-ellipsis overflow-x-hidden whitespace-nowrap w-screen"
+							}
+						>
 							{item.sq && (
 								<Tag color="danger" className="mr-1">
 									SQ
@@ -103,13 +116,16 @@ export default function Search() {
 									试听
 								</Tag>
 							)}
-							<span className={classNames.playSinger}>
-								{" "}
-								{item.ar[0] && item.ar[0].name}{" "}
-							</span>
-							<span className={classNames.playAlbum}>
-								{" "}
-								{item.al && `《${item.al.name}》`}{" "}
+							{item.ar.map((itemChild) => (
+								<span
+									key={`${item.id}+${itemChild.id}`}
+									className="text-sm mr-1"
+								>
+									{itemChild?.name}
+								</span>
+							))}
+							<span className="text-sm">
+								{item.al && `《${item.al.name}》`}
 							</span>
 						</div>
 					</List.Item>

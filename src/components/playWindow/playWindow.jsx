@@ -18,27 +18,13 @@ export function PlayWindow(props) {
 	// 播放/暂停功能
 	function changeStatus() {
 		if (playControlSlice.playStatus === "paused") {
-			dispatch(
-				changePlayStatus({
-					playStatus: "playing",
-				})
-			);
+			audioControl.play();
 		} else {
-			dispatch(
-				changePlayStatus({
-					playStatus: "paused",
-				})
-			);
+			audioControl.pause();
 		}
 	}
 
 	function onProgressAfterChange(value) {
-		// 更新UI
-		dispatch(
-			changePlayTime({
-				progress: value,
-			})
-		);
 		// 更新audio
 		audioControl.changeProgress(value);
 	}
@@ -58,6 +44,7 @@ export function PlayWindow(props) {
 			);
 		});
 		audioControl.addEventListener("timeupdate", () => {
+			// 更新进度条
 			dispatch(
 				changePlayTime({
 					progress:
@@ -66,7 +53,6 @@ export function PlayWindow(props) {
 						100,
 				})
 			);
-			console.log(playControlSlice.progress);
 		});
 	}, []);
 
@@ -109,9 +95,15 @@ export function PlayWindow(props) {
 						{playControlSlice.musicInfo.name}
 					</h4>
 					&nbsp; - &nbsp;
-					<span className={classNames.singerName}>
-						{playControlSlice.musicInfo.singer}
-					</span>
+					{Array.isArray(playControlSlice.musicInfo.singer) &&
+						playControlSlice.musicInfo.singer.map((singer) => (
+							<span
+								key={singer.id}
+								className={classNames.singerName + " mr-1 "}
+							>
+								{singer.name}
+							</span>
+						))}
 				</section>
 				<section className={classNames.playControl}>
 					<input

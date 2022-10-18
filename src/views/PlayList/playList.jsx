@@ -7,13 +7,18 @@ import {
 	fetchAllPlayList,
 	fetchPlayListDetail,
 } from "../../api/playList/playList";
-import { changePlayStatus } from "../../store/playControlSlice";
+import { changePlayStatus, addPlayList } from "../../store/playControlSlice";
 import {
 	AddSquareOutline,
 	MessageOutline,
 	SendOutline,
 } from "antd-mobile-icons";
-import { fetchArtistDetail } from "../../api/playList/artists";
+import {
+	fetchArtistDetail,
+	fetchArtistHotSong,
+} from "../../api/playList/artists";
+import { PreviewImage } from "../../components/PreviewImage/PreviewImage";
+import { audioControl } from "../../utils";
 
 export function PlayList() {
 	const dispatch = useDispatch();
@@ -44,7 +49,7 @@ export function PlayList() {
 
 	async function loadMore() {
 		return type === "playlist"
-			? fetch({
+			? fetchAllPlayList({
 					id: params.id,
 					limit,
 					offset: currentOffset.current,
@@ -63,15 +68,13 @@ export function PlayList() {
 							content: err,
 						});
 					})
-			: fetchArtistDetail({ id: params.id })
+			: fetchArtistHotSong({ id: params.id })
 					.then((res) => {
 						console.log(res);
-						if (!res.hotSongs || res.hotSongs.length === 0) {
-							setHasMore(false);
-						}
 
 						setPlayListDetail(res.artist || {});
-						setPlayList([...playList, ...res.hotSongs]);
+						setPlayList(res.hotSongs);
+						setHasMore(false);
 						currentOffset.current = currentOffset.current + limit;
 					})
 					.catch((err) => {
@@ -81,16 +84,40 @@ export function PlayList() {
 
 	function play(item) {
 		console.log(item);
-		dispatch(
-			changePlayStatus({
-				playStatus: "playing",
-				musicInfo: {
-					singer: item.ar?.[0].name || "",
-					name: item.name,
-					id: item.id,
-				},
-			})
-		);
+		// dispatch(
+		// 	changePlayStatus({
+		// 		playStatus: "playing",
+		// 		musicInfo: {
+		// 			singer: item.ar?.[0].name || "",
+		// 			name: item.name,
+		// 			id: item.id,
+		// 		},
+		// 	})
+		// );
+
+		audioControl.play(item.id);
+	}
+
+	function playAll() {
+		// dispatch(
+		// 	addPlayList({
+		// 		playList: playList.map((item) => item.id),
+		// 	})
+		// );
+		// if (audioControl.id == null) {
+		// 	dispatch(
+		// 		changePlayStatus({
+		// 			playStatus: "playing",
+		// 			musicInfo: {
+		// 				id: playList[0].id,
+		// 				singer: playList[0].ar,
+		// 				name: playList[0].name,
+		// 			},
+		// 		})
+		// 	);
+		// }
+
+		audioControl.playAll(playList.map((item) => item.id));
 	}
 
 	return (
@@ -103,7 +130,7 @@ export function PlayList() {
 				}}
 			>
 				<div
-					className="h-full blur-3xl scale-150 pb-32 flex "
+					className="h-full blur-3xl scale-150 flex "
 					style={{
 						backgroundImage: `url(${
 							type === "playlist"
@@ -112,34 +139,43 @@ export function PlayList() {
 						})`,
 					}}
 				></div>
-				<div className="absolute top-0 bottom-0 left-0 right-0 flex w-5/6 h-5/6 mx-auto justify-center items-center">
-					<img
-						className="w-28 h-28 rounded shadow-md"
-						src={
-							type === "playlist"
-								? playListDetail.coverImgUrl
-								: playListDetail.img1v1Url
-						}
-					></img>
+				<div
+					className={
+						"absolute top-0 bottom-0 left-0 right-0 flex w-5/6 h-5/6 mx-auto justify-center items-center " +
+						(type === "artists" && "flex-col ")
+					}
+				>
+					<PreviewImage>
+						<img
+							className="w-28 h-28 max-w-none rounded shadow-md"
+							src={
+								type === "playlist"
+									? playListDetail.coverImgUrl
+									: playListDetail.img1v1Url
+							}
+						></img>
+					</PreviewImage>
 
-					<div className="h-28 mx-4 ">
+					<div className={"mx-4 " + (type === "playlist" && "h-28 ")}>
 						<div className="text-base text-white">
 							<Ellipsis
 								content={playListDetail.name}
 								rows={2}
 							></Ellipsis>
 						</div>
-						<div className="text-sm flex items-center text-gray-100  opacity-90">
-							<img
-								className="w-6 h-6 rounded-full mr-2"
-								src={playListDetail.creator?.avatarUrl}
-							></img>
-							<Ellipsis
-								className="w-full"
-								content={playListDetail.creator?.nickname}
-							></Ellipsis>
-						</div>
-						<div className="text-sm text-ellipsis text-gray-100 opacity-90">
+						{type === "playlist" && (
+							<div className="text-sm flex items-center text-gray-100  opacity-90">
+								<img
+									className="w-6 h-6 rounded-full mr-2"
+									src={playListDetail.creator?.avatarUrl}
+								></img>
+								<Ellipsis
+									className="w-full"
+									content={playListDetail.creator?.nickname}
+								></Ellipsis>
+							</div>
+						)}
+						<div className="text-sm text-ellipsis text-gray-100 opacity-90 ">
 							<Ellipsis
 								content={playListDetail.description}
 								rows={2}
@@ -148,21 +184,33 @@ export function PlayList() {
 					</div>
 				</div>
 				<aside className="absolute bottom-2 w-full ">
-					<ul className="flex justify-evenly items-center w-fit px-4 mx-auto text-black text-opacity-90 shadow rounded-full h-10 bg-white">
+					<ul className="flex justify-evenly items-center w-fit px-4 mx-auto text-black text-opacity-90 shadow rounded-full h-10 bg-white whitespace-nowrap">
 						<li className="flex items-center">
-							<AddSquareOutline fontSize={20} />
-							<span className="ml-1 ">
-								{playListDetail.subscribedCount}
-							</span>
+							{type === "playlist" ? (
+								<>
+									<AddSquareOutline fontSize={20} />
+									<span className="ml-1 ">
+										{playListDetail.subscribedCount}
+									</span>
+								</>
+							) : (
+								<span onClick={() => playAll()}>播放</span>
+							)}
 						</li>
-						<li className="h-4/6 w-px bg-gray-200 mx-;"></li>
-						<li className="flex items-center">
-							<MessageOutline fontSize={20} />
-							<span className="ml-1 ">
-								{playListDetail.commentCount}
-							</span>
-						</li>
-						<li className="h-4/6 w-px bg-gray-200 mx-;"></li>
+						<li className="h-4/6 w-px bg-gray-200 mx-2"></li>
+						{type === "playlist" ? (
+							<>
+								<li className="flex items-center">
+									<MessageOutline fontSize={20} />
+									<span className="ml-1 ">
+										{playListDetail.commentCount}
+									</span>
+								</li>
+							</>
+						) : (
+							<>关注</>
+						)}
+						<li className="h-4/6 w-px bg-gray-200 mx-2"></li>
 						<li className="flex items-center">
 							<SendOutline fontSize={20} />
 							<span className="ml-1 ">
@@ -178,8 +226,11 @@ export function PlayList() {
 			>
 				{playList.map((item) => (
 					<List.Item key={item.id} onClick={() => play(item)}>
-						<div className="text-base"> {item.name} </div>
-						<div>
+						<div className="text-base text-ellipsis overflow-x-hidden whitespace-nowrap w-screen">
+							{" "}
+							{item.name}{" "}
+						</div>
+						<div className="text-ellipsis overflow-x-hidden whitespace-nowrap w-screen">
 							{item.sq && (
 								<Tag color="danger" className="mr-1">
 									SQ
@@ -195,9 +246,14 @@ export function PlayList() {
 									试听
 								</Tag>
 							)}
-							<span className="text-sm">
-								{item.ar[0] && item.ar[0].name}{" "}
-							</span>
+							{item.ar.map((itemChild) => (
+								<span
+									key={`${item.id}+${itemChild.id}`}
+									className="text-sm"
+								>
+									{itemChild?.name}{" "}
+								</span>
+							))}
 							<span className="text-sm">
 								{item.al && `《${item.al.name}》`}{" "}
 							</span>
@@ -205,7 +261,9 @@ export function PlayList() {
 					</List.Item>
 				))}
 			</List>
+
 			<InfiniteScroll loadMore={loadMore} hasMore={hasMore} />
+
 			<div className="h-16"></div>
 			<PlayWindow></PlayWindow>
 		</div>

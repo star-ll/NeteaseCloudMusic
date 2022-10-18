@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { audioControl } from "../utils/audio";
+// import { audioControl } from "../utils/audio";
 
 const initialState = {
 	musicInfo: {
@@ -8,9 +8,9 @@ const initialState = {
 		name: null,
 	},
 	progress: 0, // 播放进度，值范围 0-100
-	currentTime: null,
 	duration: null,
 	playStatus: "paused", // playing | paused,
+	playList: [], // 播放歌单
 };
 
 const playControlSlice = createSlice({
@@ -19,18 +19,7 @@ const playControlSlice = createSlice({
 	reducers: {
 		changePlayStatus(state, action) {
 			if (action.payload.playStatus) {
-				const isNew =
-					action.payload.musicInfo?.id &&
-					action.payload.musicInfo.id !== state.musicInfo.id;
 				state.playStatus = action.payload.playStatus;
-
-				if (action.payload.playStatus === "playing") {
-					audioControl.play(
-						isNew ? action.payload.musicInfo.id : null
-					);
-				} else if (action.payload.playStatus === "paused") {
-					audioControl.pause();
-				}
 			}
 
 			if (action.payload.musicInfo) {
@@ -44,16 +33,22 @@ const playControlSlice = createSlice({
 			if (action.payload.progress != null) {
 				state.progress = action.payload.progress;
 			}
-			if (action.payload.currentTime) {
-				state.currentTime = action.payload.currentTime;
-			}
 			if (action.payload.duration) {
 				state.duration = action.payload.duration;
 			}
 		},
+		playAll(state, action) {
+			state.playList = [...action.payload.playList] || [];
+		},
+		addPlayList(state, action) {},
 	},
 });
 
-export const { changePlayStatus, changePlayTime } = playControlSlice.actions;
+export const {
+	changePlayStatus,
+	changePlayTime,
+	playAll,
+	addPlayList,
+} = playControlSlice.actions;
 
 export default playControlSlice.reducer;
