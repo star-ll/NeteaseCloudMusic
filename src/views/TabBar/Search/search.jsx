@@ -2,7 +2,6 @@ import { SearchBar, List, InfiniteScroll, Tag } from "antd-mobile";
 import classNames from "./search.module.css";
 import { fetchSearchResult } from "@/api/homepage/search";
 import { useState } from "react";
-import { changePlayStatus } from "../../../store/playControlSlice";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { audioControl } from "../../../utils";
@@ -48,16 +47,6 @@ export default function Search() {
 	}
 	function play(item) {
 		console.log(item);
-		// dispatch(
-		// 	changePlayStatus({
-		// 		playStatus: "playing",
-		// 		musicInfo: {
-		// 			singer: item.ar,
-		// 			name: item.name,
-		// 			id: item.id,
-		// 		},
-		// 	})
-		// );
 		audioControl.play(item.id);
 	}
 

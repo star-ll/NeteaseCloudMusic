@@ -26,10 +26,14 @@ export default function Find() {
 			});
 		findNewSong().then((res) => {
 			setRecommendNewSong(res.result || []);
+		}).catch((err) => {
+			console.error(err);
 		});
 		findTopPlayList({ limit: 9 }).then((res) => {
 			setRecommendTopPlayList(res.playlists);
 			console.log(res);
+		}).catch((err) => {
+			console.error(err);
 		});
 	}, []);
 
@@ -71,7 +75,7 @@ export default function Find() {
 				<div>
 					<h3 className="text-lg py-2">新歌速听</h3>
 					<div className={classNames.miScroll}>
-						<ul className={classNames.recommendSongList + " flex"}>
+						<ul className={classNames.recommendSongList + " flex -mb-2 md:mb-0"}>
 							{recommendNewSong.map((item) => (
 								<li className="w-32 m-1" key={item.id}>
 									<img

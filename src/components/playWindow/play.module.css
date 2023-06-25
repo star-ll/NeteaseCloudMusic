@@ -1,15 +1,5 @@
 .playWindow {
-	height: 60px;
-	/* overflow: hidden; */
-	display: flex;
-	flex-direction: column;
-	box-shadow: 2px 0 4px 3px #f2f2f2;
-	background-color: #fff;
-	opacity: 0.95;
-	position: fixed;
-	bottom: 0;
-	width: 100vw;
-	z-index: 1000;
+	height: 80px;
 }
 .playWindow > * {
 	width: 100%;
@@ -70,9 +60,9 @@ input[type="image"] {
 	outline: none;
 }
 
-.progressSlider {
+/* .progressSlider {
 	padding: 0 0.25rem !important;
-}
+} */
 .progressSlider :global(.adm-slider-track-container) {
 	padding: 0;
 }
