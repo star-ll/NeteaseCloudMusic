@@ -21,7 +21,7 @@ export default defineConfig({
 	},
 	resolve: {
 		alias: {
-			"@": path.join(__dirname, "./src/"),
+			"@": path.join(__dirname, "./src"),
 			"@component": path.join(__dirname, "./src/components"),
 		},
 		extensions: [".tsx", ".ts", ".js", ".jsx"],

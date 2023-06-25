@@ -1,11 +1,9 @@
 import React from "react";
 import { Ellipsis, InfiniteScroll, List, Tag, Toast } from "antd-mobile";
-import { PlayWindow } from "../../components/PlayWindow/playWindow";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useParams, useLocation } from "react-router-dom";
 import { fetchAllPlayList, fetchPlayListDetail } from "../../api/playList/playList";
-import { changePlayStatus, addPlayList } from "../../store/playControlSlice";
 import { AddSquareOutline, MessageOutline, SendOutline } from "antd-mobile-icons";
 import { fetchArtistDetail, fetchArtistHotSong } from "../../api/playList/artists";
 import { PreviewImage } from "../../components/PreviewImage/PreviewImage";
