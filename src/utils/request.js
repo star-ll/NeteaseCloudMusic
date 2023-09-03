@@ -93,8 +93,8 @@ RequestAPi.interceptor.response = (response) => {
 };
 
 const request = RequestAPi.create({
-  //   baseUrl: "https://music123-chi.vercel.app/",
-  baseUrl: import.meta.env.DEV ? "/api" : "https://music123-chi.vercel.app",
+    baseUrl: "https://music123-chi.vercel.app/",
+  // baseUrl: import.meta.env.DEV ? "/api" : "https://music123-chi.vercel.app",
   credentials: "include",
 });
 export default request;
