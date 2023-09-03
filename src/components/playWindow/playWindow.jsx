@@ -1,9 +1,9 @@
 import React from "react";
 import classNames from "./play.module.css";
-import musicLogo from "../../assets/光碟.svg";
+import musicLogo from "../../assets/songPlayRound.svg";
 import playMusic from "../../assets/play_music.svg";
 import pauseMusic from "../../assets/pause_music.svg";
-import songSheet from "../../assets/歌单.svg";
+import songSheet from "../../assets/songlist.svg";
 import { useEffect, useMemo, useState } from "react";
 import { ProgressBar, Slider, Toast } from "antd-mobile";
 import { useDispatch, useSelector } from "react-redux";
