@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { changePlayStatus, changePlayTime } from "../../store/playControlSlice";
 import { audioControl } from "../../utils/audio";
 import { useNavigate } from "react-router-dom";
-import { SongProgress } from "../../views/playDetail/playDetail";
+import { SongProgress } from "../../views/PlayDetail/playDetail";
 
 export function PlayWindow(props) {
   const dispatch = useDispatch();

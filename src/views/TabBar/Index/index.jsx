@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import classNames from "./home.module.css";
-import { PlayWindow } from "@/components/PlayWindow/playWindow";
+import { PlayWindow } from "../../../components/playWindow/playWindow";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import moreUrl from "@/assets/更多.svg";
 import noLoginUrl from "@/assets/未登录.svg";
