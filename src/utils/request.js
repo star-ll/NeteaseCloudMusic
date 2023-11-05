@@ -52,9 +52,19 @@ class Request {
           if (["get", "GET".includes(method)]) {
             for (let key in data) {
               if (data[key] == null) continue;
-              url += url.includes("?") ? `&${key}=${data[key]}` : `?${key}=${data[key]}`;
+              url += url.includes("?")
+                ? `&${key}=${data[key]}`
+                : `?${key}=${data[key]}`;
             }
+          } else if (method.toLowerCase() === "post") {
+            config.body = new FormData();
+            for (const key of Object.keys(config.data)) {
+              config.body.append(key, config.data[key]);
+            }
+
+            delete config.data;
           }
+
           let response = await fetch(url, {
             method: method,
             mode: this.mode,
@@ -93,7 +103,7 @@ RequestAPi.interceptor.response = (response) => {
 };
 
 const request = RequestAPi.create({
-    baseUrl: "https://music123-chi.vercel.app/",
+  baseUrl: "https://music123-chi.vercel.app/",
   // baseUrl: import.meta.env.DEV ? "/api" : "https://music123-chi.vercel.app",
   credentials: "include",
 });

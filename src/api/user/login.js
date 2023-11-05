@@ -1,3 +1,4 @@
 import request from "../../utils/request";
 
-export const loginByPhone = (url, data) => request(url, "post", data);
+export const loginByPhone = (phone, password) =>
+  request("/login/cellphone", "post", { phone, password });

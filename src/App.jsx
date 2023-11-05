@@ -1,4 +1,5 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
+import { Outlet } from "react-router-dom";
 import logo from "./logo.svg";
 
 import "./App.css";
@@ -10,8 +11,23 @@ import Find from "@/views/TabBar/Find/find";
 import Search from "@/views/TabBar/Search/search";
 import TopList from "@/views/TabBar/TopList/topList";
 import PlayDetail from "@/views/PlayDetail/playDetail";
+// import { Login } from "./views/user/login/login";
 
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+function EmptyComponent() {
+  return (
+    <>
+      <Outlet />
+    </>
+  );
+}
+const Login = lazy(() => import("./views/user/login/login"));
+
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import { PlayList } from "./views/PlayList/playList";
 function App() {
   return (
@@ -26,6 +42,16 @@ function App() {
         <Route path="/playlist/:id" element={<PlayList></PlayList>}></Route>
         <Route path="/artists/:id" element={<PlayList></PlayList>}></Route>
         <Route path="/playDetail/:id" element={<PlayDetail />}></Route>
+        <Route path="/user" element={<EmptyComponent />}>
+          <Route
+            path="login"
+            element={
+              <Suspense fallback={<div>loading...</div>}>
+                <Login />
+              </Suspense>
+            }
+          ></Route>
+        </Route>
       </Routes>
     </Router>
   );
